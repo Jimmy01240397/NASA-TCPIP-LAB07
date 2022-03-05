@@ -1,0 +1,40 @@
+en
+
+conf t
+router bgp 10000
+network 140.116.246.0 mask 255.255.255.0
+neighbor 100.100.100.102 remote-as 1234
+exit
+
+ip route 140.116.246.0 255.255.255.0 Null 0
+ip route 0.0.0.0 0.0.0.0 Null 0
+
+router ospf 1
+network 140.116.246.252 0.0.0.3 area 0
+network 140.116.246.248 0.0.0.3 area 0
+default-information originate
+exit
+exit
+wr
+
+en
+
+conf t
+router ospf 1
+network 140.116.246.252 0.0.0.3 area 0
+network 140.116.246.0 0.0.0.63 area 1
+passive-interface g0/0/0
+exit
+exit
+wr
+
+en
+
+conf t
+router ospf 1
+network 140.116.246.248 0.0.0.3 area 0
+network 140.116.246.64 0.0.0.63 area 2
+passive-interface g0/0/0
+exit
+exit
+wr
